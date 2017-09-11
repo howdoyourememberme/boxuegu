@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>没有梦想的咸鱼</title>
+</head>
+<body>
+  <script>
+    function jsonp(url,params,callback){
+      var script = document.createElement("script");
+
+      var cbName = "jsonp" + parseInt(Math.random()*1000+1000) + ( + new Date());
+      window[cbName] = function(data){
+        callback(data);
+        document.head.removeChild(script);
+        delete window[cbName];
+      };
+
+      var paramsStr = "";
+      for(var k in params){
+        paramsStr += k + "=" + params[k] + "&";
+      }
+
+      url = url + "?" + paramsStr;
+
+      url = url + "callback=" + cbName;
+
+      script.src = url;
+
+      document.head.appendChild(script);
+
+    };
+
+    jsonp("https://api.douban.com/v2/book/search",{q:"lalala",a:12},function(data){
+      console.log(data);
+    })
+  </script>
+</body>
+</html>

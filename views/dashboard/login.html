@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学IT - 后台管理系统</title>
+    <?php include "/views/public/css.html" ?>
+    
+</head>
+<body>
+    <!-- 登录 -->
+    <div class="login">
+        <div class="login-wrap">
+            <div class="avatar">
+                <img src="/views/static/uploads/monkey.png" class="img-circle" alt="">
+            </div>
+            <form action="" class="col-xs-offset-1 col-xs-10">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <input type="text" id="tc_name" class="form-control" placeholder="用户名">
+                </div>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <i class="fa fa-key"></i>
+                    </span>
+                    <input type="password" id="tc_pass"  class="form-control" placeholder="密码">
+                </div>
+                <button type="submit" class="btn btn-lg btn-primary btn-block">登 录</button>
+            </form>
+        </div>
+    </div>
+    
+    <?php include "/views/public/js.html" ?>
+    <script>
+        $(function(){
+            $("form").submit(function(e){
+                var userName = $("#tc_name").val();
+                var pass = $("#tc_pass").val();
+
+                // if(userName.trim()==""){
+                //     alert("请输入用户名");
+                //     return false;
+                // }
+
+                // if(pass.trim()==""){
+                //     alert("请输入密码");
+                //     return false;
+                // }
+
+                 $.ajax({
+                    url: "/api/login",
+                    type: "post",
+                    data: {
+                        tc_name: userName,
+                        tc_pass: pass
+                    },
+                    success: function(data){
+                        console.log(1)
+                        if(data.code == 200){
+                            //登录成功之后，
+                            //先将后台返回用户的头像以及用户名信息
+                            //保存到cookie中，为了能够让首页也使用这个信息
+
+                            //应该先将对象转成json格式的字符串，然后再存
+                            $.cookie("userinfo", JSON.stringify(data.result), {expires: 365, path: "/"});
+
+                            // 让用户跳转到首页
+                            location.href = "/";
+                            // console.log(data);
+                            
+                        }
+                    },
+                    error:function(xhr){
+                        console.log(xhr)
+                    }
+                });
+
+                return false;
+            })
+        })
+    </script>
+
+
+
+  
+</body>
+</html>
